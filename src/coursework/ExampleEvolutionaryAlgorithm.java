@@ -153,12 +153,75 @@ public class  ExampleEvolutionaryAlgorithm extends NeuralNetwork {
 	 * parents. 
 	 */
 	private ArrayList<Individual> reproduce(Individual parent1, Individual parent2) {
+		var chromosomeLength =parent1.chromosome.length;
 		ArrayList<Individual> children = new ArrayList<>();
 		children.add(parent1.copy());
 		children.add(parent2.copy());			
 		return children;
-	} 
+	}
 	
+	// crossover
+	public int[] onePointCrossover(int chromosomeLength,Individual parent1, Individual parent2)
+	{
+		// one point
+		
+		// pick crosspoint at random
+		var crossPoint = random.nextInt(chromosomeLength);
+		
+		var child= new Individual();
+		
+		// first part of child is copied from parent1, and 2nd
+		// part from parent2
+		child=parent1.copy();
+		
+		for (var j = 0; j < crossPoint; j++) {
+			child.chromosome[j] = parent1.chromosome[j];
+		}
+		for (j = crossPoint; j < (length); j++){
+			child[j] = population[parent2, j];}
+		return (child);
+	}
+	
+	public int[] twoPointCrossover(Individual parent1, Individual parent2)
+	{
+		//TODO MAKE SURE THIS IS ACTUALLY WORKING AS EXPECTED
+		// two points
+		int crossPoint1, crossPoint2, j;
+		
+		// pick crosspoint1 at random, has to leave enough room for at least one gene after crosspoint 2 (otherwise it'd just be a 1 point crossover)
+		crossPoint1 = random.Next(length - 1);
+		
+		//crosspoint2 -"-, has to be between crosspoint 1 and end of chromosome, again leaving at least one gene between crosspoints
+		crossPoint2 = random.Next(crossPoint1 + 1, length);
+		
+		// up to cp1 is copied from p1, between cp1 and 2 from p2, cp2 to end from p1 again
+		for (j = 0; j < crossPoint1; j++)
+			child[j] = population[p1, j];
+		
+		for (j = 0; j < crossPoint2; j++)
+			child[j] = population[p2, j];
+		
+		for (j = crossPoint2; j < (length); j++)
+			child[j] = population[p1, j];
+		return (child);
+	}
+	
+	public int[] uniformCrossover(Individual parent1, Individual parent2)
+	{
+		int j;
+		//TODO DOUBLE CHECK PLS
+		for (j = 0; j < length; j++)
+			if (random.Next() >= 0.5)
+			{
+				child[j] = population[p1, j];
+			}
+			else
+			{
+				child[j] = population[p2, j];
+			}
+		
+		return (child);
+	}
 	/**
 	 * Mutation
 	 * 
