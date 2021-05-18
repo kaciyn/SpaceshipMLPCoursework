@@ -21,6 +21,9 @@ public class Parameters {
 	public static int popSize = 40;
 	public static int maxEvaluations = 20000;
 	
+	public static int tournamentSize = 2;
+	
+	
 	// Parameters for mutation 
 	// Rate = probability of changing a gene
 	// Change = the maximum +/- adjustment to the gene value

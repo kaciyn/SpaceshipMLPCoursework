@@ -1,6 +1,7 @@
 package coursework;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import model.Fitness;
 import model.Individual;
@@ -15,7 +16,9 @@ import model.NeuralNetwork;
  */
 public class  ExampleEvolutionaryAlgorithm extends NeuralNetwork {
 	
-
+	//TODO move down if not used everywhere
+	Random random;
+	
 	/**
 	 * The Main Evolutionary Loop
 	 */
@@ -88,7 +91,7 @@ public class  ExampleEvolutionaryAlgorithm extends NeuralNetwork {
 	 * 
 	 */
 	private Individual getBest() {
-		best = null;;
+		best = null;
 		for (Individual individual : population) {
 			if (best == null) {
 				best = individual.copy();
@@ -120,8 +123,26 @@ public class  ExampleEvolutionaryAlgorithm extends NeuralNetwork {
 	 * NEEDS REPLACED with proper selection this just returns a copy of a random
 	 * member of the population
 	 */
-	private Individual select() {		
-		Individual parent = population.get(Parameters.random.nextInt(Parameters.popSize));
+	private Individual select() {
+		
+		//tournament selection
+		
+		var pickedIndividual=population.get(random.nextInt(population.size()));
+		var bestFitness = pickedIndividual.fitness;
+		var bestIndividual = pickedIndividual;
+		
+		for (var i = 0; i < Parameters.tournamentSize - 1; i++)
+		{
+			pickedIndividual=population.get(random.nextInt(population.size()));
+			
+			if (pickedIndividual.fitness> bestFitness)
+			{
+				bestFitness = pickedIndividual.fitness;
+				bestIndividual = pickedIndividual;
+			}
+		}
+		
+		Individual parent = bestIndividual;
 		return parent.copy();
 	}
 
