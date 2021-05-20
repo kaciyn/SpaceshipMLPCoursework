@@ -23,6 +23,12 @@ public class Parameters {
 	
 	public static int tournamentSize = 2;
 	
+	//1=1 point
+    //2=2 point
+    //3=uniform
+	public static int crossoverType = 1;
+	
+	public static int childrenPerReproduction = 2;
 	
 	// Parameters for mutation 
 	// Rate = probability of changing a gene
