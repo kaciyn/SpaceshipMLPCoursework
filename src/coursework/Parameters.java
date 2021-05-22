@@ -13,12 +13,12 @@ public class Parameters {
 	 * You may add other Parameters as required to this class 
 	 * 
 	 */
-	private static int numHidden = 5;	
+	private static int numHiddenNodes = 5;
 	private static int numGenes = calculateNumGenes();
 	public static double minGene = -3; // specifies minimum and maximum weight values 
 	public static double maxGene = +3;
 		
-	public static int popSize = 40;
+	public static int popSize = 200;
 	public static int maxEvaluations = 20000;
 	
 	public static int tournamentSize = 2;
@@ -26,9 +26,9 @@ public class Parameters {
 	//1=1 point
     //2=2 point
     //3=uniform
-	public static int crossoverType = 1;
+	public static int crossoverType = 2;
 	
-	public static int childrenPerReproduction = 2;
+	public static int childrenPerReproduction = 1;
 	
 	// Parameters for mutation 
 	// Rate = probability of changing a gene
@@ -54,16 +54,16 @@ public class Parameters {
 
 	
 	private static int calculateNumGenes() {
-		int num = (NeuralNetwork.numInput * numHidden) + (numHidden * NeuralNetwork.numOutput) + numHidden + NeuralNetwork.numOutput;
+		int num = (NeuralNetwork.numInput * numHiddenNodes) + (numHiddenNodes * NeuralNetwork.numOutput) + numHiddenNodes + NeuralNetwork.numOutput;
 		return num;
 	}
 
-	public static int getNumHidden() {
-		return numHidden;
+	public static int getNumHiddenNodes() {
+		return numHiddenNodes;
 	}
 	
 	public static void setHidden(int nHidden) {
-		numHidden = nHidden;
+		numHiddenNodes = nHidden;
 		numGenes = calculateNumGenes();		
 	}
 

@@ -18,8 +18,7 @@ import static coursework.Parameters.*;
 public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
 {
     
-    //TODO move down if not used everywhere
-    Random random;
+   
     
     /**
      * The Main Evolutionary Loop
@@ -160,7 +159,6 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
                 uniformCrossover(children, parent1, parent2);
         }
         
-       
         return children;
     }
     
@@ -178,7 +176,6 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
             
             // first part of child is copied from parent1, and 2nd
             // part from parent2
-            child = parent1.copy();
             
             for (var j = 0; j < crossPoint; j++) {
                 child.chromosome[j] = parent1.chromosome[j];
@@ -264,10 +261,11 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
      * Replaces the worst member of the population
      * (regardless of fitness)
      */
+    //TODO this seems? implemented? like it doesn't not regard fitness
     private void replace(ArrayList<Individual> individuals) {
         for (Individual individual : individuals) {
-            int idx = getWorstIndex();
-            population.set(idx, individual);
+            int index = getWorstIndex();
+            population.set(index, individual);
         }
     }
     
@@ -277,20 +275,22 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
      * @return
      */
     private int getWorstIndex() {
-        Individual worst = null;
-        int idx = -1;
-        for (int i = 0; i < population.size(); i++) {
+        int index = 0;
+        
+        var worst = population.get(0);
+        
+        //why check if worst is null every time in the loop when it's only null before the loop runs
+        
+        for (int i = 1; i < population.size(); i++) {
+            
             Individual individual = population.get(i);
-            if (worst == null) {
+            
+            if (individual.fitness > worst.fitness) {
                 worst = individual;
-                idx = i;
-            }
-            else if (individual.fitness > worst.fitness) {
-                worst = individual;
-                idx = i;
+                index = i;
             }
         }
-        return idx;
+        return index;
     }
     
     @Override
