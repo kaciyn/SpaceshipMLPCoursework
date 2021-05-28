@@ -58,7 +58,7 @@ public class Parameters {
 		return num;
 	}
 
-	public static int getNumHiddenNodes() {
+	public static int getNumHidden() {
 		return numHiddenNodes;
 	}
 	

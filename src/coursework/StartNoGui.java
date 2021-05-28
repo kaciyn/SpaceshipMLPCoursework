@@ -21,7 +21,7 @@ public class StartNoGui {
 		//Set the data set for training 
 		Parameters.setDataSet(DataSet.Training);
 		
-		Parameters.setHidden(Parameters.getNumHiddenNodes());
+		Parameters.setHidden(Parameters.getNumHidden());
 		
 		//Create a new Neural Network Trainer Using the above parameters 
 		NeuralNetwork nn = new ExampleEvolutionaryAlgorithm();		
