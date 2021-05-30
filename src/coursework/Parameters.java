@@ -67,6 +67,24 @@ public class Parameters {
 		numGenes = calculateNumGenes();		
 	}
 
+	public static String printParamsToCsv(){
+		String str = "";
+		
+		for(Field field : Parameters.class.getDeclaredFields()) {
+			String name = field.getName();
+			Object val = null;
+			try {
+				val = field.get(null);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			str += name + "," + val + "\r\n";
+			
+		}
+		return str;
+	}
+	
 	public static String printParams() {
 		String str = "";
 		for(Field field : Parameters.class.getDeclaredFields()) {
@@ -93,6 +111,6 @@ public class Parameters {
 	}
 	
 	public static void main(String[] args) {
-		printParams();
+		printParamsToCsv();
 	}
 }
