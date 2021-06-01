@@ -1,12 +1,8 @@
 package coursework;
 
 import java.util.ArrayList;
-import java.util.Random;
 
-import model.Fitness;
-import model.Individual;
-import model.LunarParameters.DataSet;
-import model.NeuralNetwork;
+import model.*;
 
 import static coursework.Parameters.*;
 
@@ -70,8 +66,9 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
             //Increment number of completed generations
         }
         
-        //save the trained network to disk
-        saveNeuralNetwork();
+        //save the trained network + used parameters & fitness to disk
+        saveParametersAndFitnessToCsv(saveNeuralNetworkAndReturnFilename());
+        
     }
     
     /**
@@ -302,5 +299,38 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
             return 1.0;
         }
         return Math.tanh(x);
+    }
+    
+    protected void saveParametersAndFitnessToCsv(String filename) {
+        if (!filename.isEmpty() ) {
+            var output = "";
+            output+="Run ID,"+filename;
+            output = output + Parameters.printParamsToCsv();
+            output = output + "Training Set, " + LunarParameters.getDataSet() + "\r\n";
+            output = output + "Fitness, " + this.best.fitness;
+            StringIO.writeStringToFile(filename + "-PF.csv", output, false);
+            System.out.println(output);
+        }
+    }
+    
+    protected String saveNeuralNetworkAndReturnFilename() {
+        if (this.best != null && this.best.chromosome != null && this.best.chromosome.length >= 1) {
+            String str = "";
+            
+            for(int i = 0; i < this.best.chromosome.length - 1; ++i) {
+                str = str + this.best.chromosome[i] + ",";
+            }
+            
+            str = str + this.best.chromosome[this.best.chromosome.length - 1] + "\r\n";
+            str = str + Parameters.printParams();
+            str = str + "Training Set " + LunarParameters.getDataSet() + "\r\n";
+            str = str + "Fitness " + this.best.fitness;
+            String filePrefix = System.currentTimeMillis() + "-" + Parameters.getNumHidden();
+            StringIO.writeStringToFile(filePrefix + ".txt", str, false);
+            System.out.println(str);
+            
+            return filePrefix;
+        }
+        return null;
     }
 }
