@@ -1,21 +1,19 @@
 package coursework;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import model.Fitness;
 import model.Individual;
-import model.LunarParameters.DataSet;
-import model.NeuralNetwork;
+import model.NeuralNetworkModified;
 
 import static coursework.Parameters.*;
 
 /**
  * Implements a basic Evolutionary Algorithm to train a Neural Network
  * <p>
- * You Can Use This Class to implement your EA or implement your own class that extends {@link NeuralNetwork}
+ * You Can Use This Class to implement your EA or implement your own class that extends {@link NeuralNetworkModified}
  */
-public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
+public class ExampleEvolutionaryAlgorithm extends NeuralNetworkModified
 {
     
    

@@ -2,12 +2,13 @@ package coursework;
 
 import model.Fitness;
 import model.Individual;
-import model.NeuralNetwork;
+import model.NeuralNetworkModified;
 
-public class ExampleHillClimber extends NeuralNetwork{
+public class ExampleHillClimber extends NeuralNetworkModified
+{
 
 	public static void main(String[] args) {
-		NeuralNetwork hillClimber = new ExampleHillClimber();
+		NeuralNetworkModified hillClimber = new ExampleHillClimber();
 		hillClimber.run();
 	}
 	

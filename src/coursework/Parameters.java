@@ -3,7 +3,7 @@ package coursework;
 import java.lang.reflect.Field;
 import java.util.Random;
 import model.LunarParameters;
-import model.NeuralNetwork;
+import model.NeuralNetworkModified;
 import model.LunarParameters.DataSet;
 
 public class Parameters {
@@ -54,7 +54,7 @@ public class Parameters {
 
 	
 	private static int calculateNumGenes() {
-		int num = (NeuralNetwork.numInput * numHiddenNodes) + (numHiddenNodes * NeuralNetwork.numOutput) + numHiddenNodes + NeuralNetwork.numOutput;
+		int num = (NeuralNetworkModified.numInput * numHiddenNodes) + (numHiddenNodes * NeuralNetworkModified.numOutput) + numHiddenNodes + NeuralNetworkModified.numOutput;
 		return num;
 	}
 

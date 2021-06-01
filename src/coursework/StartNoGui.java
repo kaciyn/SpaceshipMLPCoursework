@@ -2,7 +2,7 @@ package coursework;
 
 import model.Fitness;
 import model.LunarParameters.DataSet;
-import model.NeuralNetwork;
+import model.NeuralNetworkModified;
 
 /**
  * Example of how to to run the {@link ExampleEvolutionaryAlgorithm} without the need for the GUI
@@ -24,7 +24,7 @@ public class StartNoGui {
 		Parameters.setHidden(Parameters.getNumHidden());
 		
 		//Create a new Neural Network Trainer Using the above parameters 
-		NeuralNetwork nn = new ExampleEvolutionaryAlgorithm();		
+		NeuralNetworkModified nn = new ExampleEvolutionaryAlgorithm();
 		
 		//train the neural net (Go and have a coffee) 
 		nn.run();
@@ -47,7 +47,7 @@ public class StartNoGui {
 		Parameters.setDataSet(DataSet.Test);
 		double fitness = Fitness.evaluate(nn);
 		System.out.println("Fitness on " + Parameters.getDataSet() + " " + fitness);
-		
+		`
 		/**
 		 * Or We can reload the NN from the file generated during training and test it on a data set 
 		 * We can supply a filename or null to open a file dialog 
