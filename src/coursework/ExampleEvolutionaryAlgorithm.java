@@ -14,8 +14,6 @@ import static coursework.Parameters.*;
 public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
 {
     
-   
-    
     /**
      * The Main Evolutionary Loop
      */
@@ -154,6 +152,9 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
                 twoPointCrossover(children, parent1, parent2);
             case 3:
                 uniformCrossover(children, parent1, parent2);
+            case 4:
+                arithmeticCrossover(children, parent1, parent2);
+    
         }
         
         return children;
@@ -231,7 +232,23 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
             else {
                 child.chromosome[j] = parent2.chromosome[j];
             }
+            children.add(child);
+    
         }
+        
+        return (children);
+    }
+    
+    public ArrayList<Individual> arithmeticCrossover(ArrayList<Individual> children, Individual parent1, Individual parent2)
+    {
+        int j;
+        for (j = 0; j < getNumGenes(); j++) {
+            var child = new Individual();
+            child.chromosome[j] = (parent1.chromosome[j] + parent2.chromosome[j]) / 2;
+            children.add(child);
+    
+        }
+        
         
         return (children);
     }
@@ -302,9 +319,9 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
     }
     
     protected void saveParametersAndFitnessToCsv(String filename) {
-        if (!filename.isEmpty() ) {
+        if (!filename.isEmpty()) {
             var output = "";
-            output+="Run ID,"+filename;
+            output += "Run ID," + filename;
             output = output + Parameters.printParamsToCsv();
             output = output + "Training Set, " + LunarParameters.getDataSet() + "\r\n";
             output = output + "Fitness, " + this.best.fitness;
@@ -314,12 +331,13 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
     }
     
     protected void appendParametersAndFitnessToResultsCsv(String filename) {
-        if (!filename.isEmpty() ) {
+        if (!filename.isEmpty()) {
             var output = "";
-            output+=filename+",";
-            output +=  Parameters.appendParamsToCsv()+LunarParameters.getDataSet() +","+ this.best.fitness+ "\r\n";;
-         
-            StringIO.writeStringToFile(Parameters.getResultsFilename() , output, true);
+            output += filename + ",";
+            output += Parameters.appendParamsToCsv() + LunarParameters.getDataSet() + "," + this.best.fitness + "\r\n";
+            ;
+            
+            StringIO.writeStringToFile(Parameters.getResultsFilename(), output, true);
 //            System.out.println(output);
         }
     }
@@ -328,7 +346,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
         if (this.best != null && this.best.chromosome != null && this.best.chromosome.length >= 1) {
             String str = "";
             
-            for(int i = 0; i < this.best.chromosome.length - 1; ++i) {
+            for (int i = 0; i < this.best.chromosome.length - 1; ++i) {
                 str = str + this.best.chromosome[i] + ",";
             }
             
