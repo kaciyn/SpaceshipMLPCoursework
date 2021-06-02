@@ -31,18 +31,21 @@ public class StartNoGui
         
         Parameters.setHidden(Parameters.getNumHidden());
         
-        //Create a new Neural Network Trainer Using the above parameters
-        NeuralNetwork nn = new ExampleEvolutionaryAlgorithm();
-        
-        //train the neural net (Go and have a coffee)
-        nn.run();
-        
-        /* Print out the best weights found
-         * (these will have been saved to disk in the project default directory using
-         * the saveWeights method in EvolutionaryTrainer)
-         */
-        System.out.println(nn.best);
-        
+        var numberOfRuns=10;
+        for (int i = 0; i < numberOfRuns; i++) {
+    
+            //Create a new Neural Network Trainer Using the above parameters
+            NeuralNetwork nn = new ExampleEvolutionaryAlgorithm();
+    
+            //train the neural net (Go and have a coffee)
+            nn.run();
+    
+            /* Print out the best weights found
+             * (these will have been saved to disk in the project default directory using
+             * the saveWeights method in EvolutionaryTrainer)
+             */
+            System.out.println(nn.best);
+        }
         /**
          * The last File Saved to the Output Directory will contain the best weights /
          * Parameters and Fitness on the Training Set
