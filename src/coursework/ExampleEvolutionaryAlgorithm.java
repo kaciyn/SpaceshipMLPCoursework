@@ -30,7 +30,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
          * main EA processing loop
          */
         
-        while (evaluations < Parameters.maxEvaluations) {
+        while (evaluations < Parameters.getMaxEvaluations()) {
             
             /**
              * this is a skeleton EA - you need to add the methods.
@@ -99,7 +99,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
      */
     private ArrayList<Individual> initialise() {
         population = new ArrayList<>();
-        for (int i = 0; i < Parameters.popSize; ++i) {
+        for (int i = 0; i < Parameters.getPopSize(); ++i) {
             //chromosome weights are initialised randomly in the constructor
             Individual individual = new Individual();
             population.add(individual);
@@ -122,7 +122,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
         var bestFitness = pickedIndividual.fitness;
         var bestIndividual = pickedIndividual;
         
-        for (var i = 0; i < Parameters.tournamentSize - 1; i++) {
+        for (var i = 0; i < Parameters.getTournamentSize() - 1; i++) {
             pickedIndividual = population.get(random.nextInt(population.size()));
             
             if (pickedIndividual.fitness > bestFitness) {
@@ -144,7 +144,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
     private ArrayList<Individual> reproduce(Individual parent1, Individual parent2) {
         ArrayList<Individual> children = new ArrayList<>();
         
-        switch (crossoverType) {
+        switch (getCrossoverType()) {
             case 1:
                 onePointCrossover(children, parent1, parent2);
                 break;
@@ -164,7 +164,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
     public ArrayList<Individual> onePointCrossover(ArrayList<Individual> children, Individual parent1, Individual parent2)
     {
         
-        for (int i = 0; i < childrenPerReproduction; i++) {
+        for (int i = 0; i < getChildrenPerReproduction(); i++) {
             var child = new Individual();
             
             // one point
@@ -190,7 +190,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
     
     public ArrayList<Individual> twoPointCrossover(ArrayList<Individual> children, Individual parent1, Individual parent2)
     {
-        for (int i = 0; i < childrenPerReproduction; i++) {
+        for (int i = 0; i < getChildrenPerReproduction(); i++) {
             
             var child = new Individual();
             
@@ -259,12 +259,12 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
     private void mutate(ArrayList<Individual> individuals) {
         for (Individual individual : individuals) {
             for (int i = 0; i < individual.chromosome.length; i++) {
-                if (Parameters.random.nextDouble() < Parameters.mutateRate) {
+                if (Parameters.random.nextDouble() < Parameters.getMutateRate()) {
                     if (Parameters.random.nextBoolean()) {
-                        individual.chromosome[i] += (Parameters.mutateChange);
+                        individual.chromosome[i] += (Parameters.getMutateChange());
                     }
                     else {
-                        individual.chromosome[i] -= (Parameters.mutateChange);
+                        individual.chromosome[i] -= (Parameters.getMutateChange());
                     }
                 }
             }

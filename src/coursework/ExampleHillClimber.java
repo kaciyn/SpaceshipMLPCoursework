@@ -17,7 +17,7 @@ public class ExampleHillClimber extends NeuralNetwork{
 		best = new Individual();
 		
 		//run for max evaluations
-		for(int gen = 0; gen < Parameters.maxEvaluations; gen++) {
+		for(int gen = 0; gen < Parameters.getMaxEvaluations(); gen++) {
 			//mutate the best
 			Individual candidate = mutateBest();
 			
@@ -34,11 +34,11 @@ public class ExampleHillClimber extends NeuralNetwork{
 	private Individual mutateBest() {
 		Individual candidate = best.copy();
 		for (int i = 0; i < candidate.chromosome.length; i++) {
-			if (Parameters.random.nextDouble() < Parameters.mutateRate) {
+			if (Parameters.random.nextDouble() < Parameters.getMutateRate()) {
 				if (Parameters.random.nextBoolean()) {
-					candidate.chromosome[i] += (Parameters.mutateChange);
+					candidate.chromosome[i] += (Parameters.getMutateChange());
 				} else {
-					candidate.chromosome[i] -= (Parameters.mutateChange);
+					candidate.chromosome[i] -= (Parameters.getMutateChange());
 				}
 			}
 		}
