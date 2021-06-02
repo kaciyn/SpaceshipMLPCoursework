@@ -10,29 +10,29 @@ import model.LunarParameters.DataSet;
 public class Parameters
 {
     
-    private static int numHiddenNodes = 5;
+    private static int numHiddenNodes;
     private static int numGenes = calculateNumGenes();
-    public static double minGene = -3; // specifies minimum and maximum weight values
-    public static double maxGene = +3;
+    private static double minGene; // specifies minimum and maximum weight values
+    private static double maxGene;
     
-    private static int popSize = 200;
-    private static int maxEvaluations = 1000;
+    private static int popSize;
+    private static int maxEvaluations;
     
-    private static int tournamentSize = 2;
+    private static int tournamentSize;
     
     //1=1 point
     //2=2 point
     //3=uniform
     //4=arithmetic
-    private static int crossoverType = 4;
+    private static int crossoverType;
     
-    private static int childrenPerReproduction = 1;
+    private static int childrenPerReproduction;
     
     // Parameters for mutation
     // Rate = probability of changing a gene
     // Change = the maximum +/- adjustment to the gene value
-    private static double mutateRate = 0.04; // mutation rate for mutation operator
-    private static double mutateChange = 0.1; // delta change for mutation operator
+    private static double mutateRate ; // mutation rate for mutation operator
+    private static double mutateChange ; // delta change for mutation operator
     
     //Random number generator used throughout the application
     public static long seed = System.currentTimeMillis();
@@ -224,5 +224,21 @@ public class Parameters
     
     public static void setMutateChange(double mutateChange) {
         Parameters.mutateChange = mutateChange;
+    }
+    
+    public static double getMinGene() {
+        return minGene;
+    }
+    
+    public static void setMinGene(double minGene) {
+        Parameters.minGene = minGene;
+    }
+    
+    public static double getMaxGene() {
+        return maxGene;
+    }
+    
+    public static void setMaxGene(double maxGene) {
+        Parameters.maxGene = maxGene;
     }
 }

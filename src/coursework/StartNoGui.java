@@ -28,11 +28,40 @@ public class StartNoGui
         
         //Set the data set for training
         Parameters.setDataSet(DataSet.Training);
-        
-        Parameters.setHidden(Parameters.getNumHidden());
-        
-        var numberOfRuns=10;
-        for (int i = 0; i < numberOfRuns; i++) {
+    
+        var numberOfRunsPerParameterConfiguration=10;
+    //yes this is nested bad complexity hell and if i were being graded on it i'd do it better but i am not (:
+        for (int i = 1; i <=4; i++) {
+            Parameters.setCrossoverType(i);
+    
+            for (int j = 1; j <= 4; j++) {
+                Parameters.setChildrenPerReproduction(j);
+    
+                for (int k = 1; k <= 5; k++) {
+                    Parameters.setMaxGene(k);
+                    Parameters.setMinGene(-k);
+    
+                    for (int l = 1; l <= 10; l++) {
+                        Parameters.setHidden(l);
+    
+                        for (int m = 100; m <=1000 ; m+=100) {
+                            Parameters.setPopSize(m);
+    
+                            for (int n = 1; n <=100; n*=2) {
+                                Parameters.setTournamentSize(n);
+    
+                                for (double o =0.5; o <=1; o++) {
+                                
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+    
+        for (int i = 0; i < numberOfRunsPerParameterConfiguration; i++) {
     
             //Create a new Neural Network Trainer Using the above parameters
             NeuralNetwork nn = new ExampleEvolutionaryAlgorithm();
