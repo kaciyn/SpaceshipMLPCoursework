@@ -1,6 +1,7 @@
 package coursework;
 
 import model.Fitness;
+import model.LunarParameters;
 import model.LunarParameters.DataSet;
 import model.NeuralNetwork;
 import model.StringIO;
@@ -23,9 +24,7 @@ public class StartNoGui
          *
          */
         
-        var resultsFileName="RunResults.csv";
-    
-        createResultsFileIfNotExtant(resultsFileName);
+        createResultsFileIfNotExtant(Parameters.getResultsFilename());
         
         //Set the data set for training
         Parameters.setDataSet(DataSet.Training);
@@ -50,9 +49,9 @@ public class StartNoGui
          *
          * We can used the trained NN to Test on the test Set
          */
-        Parameters.setDataSet(DataSet.Test);
-        double fitness = Fitness.evaluate(nn);
-        System.out.println("Fitness on " + Parameters.getDataSet() + " " + fitness);
+//        Parameters.setDataSet(DataSet.Test);
+//        double fitness = Fitness.evaluate(nn);
+//        System.out.println("Fitness on " + Parameters.getDataSet() + " " + fitness);
         
         /**
          * Or We can reload the NN from the file generated during training and test it on a data set
@@ -64,18 +63,18 @@ public class StartNoGui
          *
          */
         
-        ExampleEvolutionaryAlgorithm nn2 = ExampleEvolutionaryAlgorithm.loadNeuralNetwork("1518446327913-5.txt");
-        Parameters.setDataSet(DataSet.Random);
-        double fitness2 = Fitness.evaluate(nn2);
-        System.out.println("Fitness on " + Parameters.getDataSet() + " " + fitness2);
+//        ExampleEvolutionaryAlgorithm nn2 = ExampleEvolutionaryAlgorithm.loadNeuralNetwork("1518446327913-5.txt");
+//        Parameters.setDataSet(DataSet.Random);
+//        double fitness2 = Fitness.evaluate(nn2);
+//        System.out.println("Fitness on " + Parameters.getDataSet() + " " + fitness2);
         
     }
     
    static void createResultsFileIfNotExtant(String filename) {
         if (filename == null || !(new File(filename)).exists()) {
             
-            var parameterFields = Parameters.printParamFieldsToCsv();
-            
+            var parameterFields ="Run ID,"+ Parameters.printParamFieldsToCsv()+ "Training Set,Fitness"+"\r\n";
+        
             StringIO.writeStringToFile(filename, parameterFields, false);
         }
     }

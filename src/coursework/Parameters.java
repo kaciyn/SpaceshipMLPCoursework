@@ -14,13 +14,14 @@ public class Parameters
      * These parameter values can be changed
      * You may add other Parameters as required to this class
      */
+    
     private static int numHiddenNodes = 5;
     private static int numGenes = calculateNumGenes();
     public static double minGene = -3; // specifies minimum and maximum weight values
     public static double maxGene = +3;
     
     public static int popSize = 200;
-    public static int maxEvaluations = 20000;
+    public static int maxEvaluations = 1000;
     
     public static int tournamentSize = 2;
     
@@ -40,6 +41,8 @@ public class Parameters
     //Random number generator used throughout the application
     public static long seed = System.currentTimeMillis();
     public static Random random = new Random(seed);
+ 
+    private static String resultsFileName="RunResults.csv";
     
     //set the NeuralNetwork class here to use your code from the GUI
 //    public static Class neuralNetworkClass = ExampleHillClimber.class;
@@ -110,7 +113,6 @@ public class Parameters
             str += val + ",";
         }
         
-        str += "\r\n";
         
         return str;
     }
@@ -137,9 +139,8 @@ public class Parameters
         String str = "";
         
         for (Field field : Parameters.class.getDeclaredFields()) {
-            String name = field.getName();
-            
-            str += name + "\r\n";
+    
+            str += field.getName() + ",";
             
         }
         return str;
@@ -153,7 +154,13 @@ public class Parameters
         return LunarParameters.getDataSet();
     }
     
+    public static String getResultsFilename() {
+        return resultsFileName;
+    }
+    
     public static void main(String[] args) {
         printParamsToCsv();
     }
+    
+    
 }

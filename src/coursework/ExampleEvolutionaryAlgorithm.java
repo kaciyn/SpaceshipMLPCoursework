@@ -67,7 +67,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
         }
         
         //save the trained network + used parameters & fitness to disk
-        saveParametersAndFitnessToCsv(saveNeuralNetworkAndReturnFilename());
+        appendParametersAndFitnessToResultsCsv(saveNeuralNetworkAndReturnFilename());
         
     }
     
@@ -310,6 +310,17 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
             output = output + "Fitness, " + this.best.fitness;
             StringIO.writeStringToFile(filename + "-PF.csv", output, false);
             System.out.println(output);
+        }
+    }
+    
+    protected void appendParametersAndFitnessToResultsCsv(String filename) {
+        if (!filename.isEmpty() ) {
+            var output = "";
+            output+=filename+",";
+            output +=  Parameters.appendParamsToCsv()+LunarParameters.getDataSet() +","+ this.best.fitness+ "\r\n";;
+         
+            StringIO.writeStringToFile(Parameters.getResultsFilename() , output, true);
+//            System.out.println(output);
         }
     }
     
