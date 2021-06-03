@@ -50,24 +50,28 @@ public class StartNoGui
                     Parameters.setMaxGene(k);
                     Parameters.setMinGene(-k);
                     
-                    for (int l = 1; l <= 10; l++) {
+                    for (int l = 3; l <= 7; l++) {
                         Parameters.setHidden(l);
                         
                         for (int m = 100; m <= 1000; m += 100) {
                             Parameters.setPopSize(m);
-                            double idealMutateRate = 1 / valueOf(m);
+                            double idealMutateRate = 1 / (double) m;
                             
-                            for (int n = 2; n <= 100; n *= 2) {
-                                Parameters.setTournamentSize(n);
+                            //tournament size scaled to population since what we're varying is the selection pressure-
+                            //although that's a question, is there a point to varying both pop and tourney size since they'll work in opposite ways wrt selection pressure?
+                            //who knows! we'll see i guess
+                            for (double n = 0.05; n <= 1; n *= 2) {
+                              var tournamentSize=  (int)(Parameters.getPopSize()*n);
+                                Parameters.setTournamentSize(tournamentSize);
                                 
-                                //scaled by population size?? it looks like it's redundant but it isn't!! i think? we'll see
-                                for (double o = 0.001; o <= 1 * Parameters.getPopSize(); o += 0.001 * Parameters.getPopSize())
+                                //centred around the approx. ideal mutation rate of 1/population size
+                                for (double o = 0.25; o <= 2 ; o *=2 * Parameters.getPopSize())
                                 {
-                                    var mutationToPopulationRatio = o / Parameters.getPopSize();
+                                    var mutationToPopulationRatio = o*(1 / Parameters.getPopSize());
                                     
                                     Parameters.setMutateRate(mutationToPopulationRatio);
                                     
-                                    for (double p = 0.01; p < .1; p += 0.01) {
+                                    for (double p = 0.01; p <= .1; p += 0.015) {
                                         Parameters.setMutateChange(p);
                                         
                                         for (int q = 0; q < numberOfRunsPerParameterConfiguration; q++) {
