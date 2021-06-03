@@ -28,30 +28,56 @@ public class StartNoGui
         
         //Set the data set for training
         Parameters.setDataSet(DataSet.Training);
-    
-        var numberOfRunsPerParameterConfiguration=10;
-    //yes this is nested bad complexity hell and if i were being graded on it i'd do it better but i am not (:
-        for (int i = 1; i <=4; i++) {
+        
+        Parameters.setMaxEvaluations(20000);
+        
+        var numberOfRunsPerParameterConfiguration = 10;
+        
+        //yes this is nested bad complexity hell and if i were being graded on it i'd do it better but i am not (:
+        for (int i = 1; i <= 4; i++) {
             Parameters.setCrossoverType(i);
-    
+            
             for (int j = 1; j <= 4; j++) {
                 Parameters.setChildrenPerReproduction(j);
-    
+                
                 for (int k = 1; k <= 5; k++) {
                     Parameters.setMaxGene(k);
                     Parameters.setMinGene(-k);
-    
+                    
                     for (int l = 1; l <= 10; l++) {
                         Parameters.setHidden(l);
-    
-                        for (int m = 100; m <=1000 ; m+=100) {
+                        
+                        for (int m = 100; m <= 1000; m += 100) {
                             Parameters.setPopSize(m);
-    
-                            for (int n = 1; n <=100; n*=2) {
+                            
+                            for (int n = 1; n <= 100; n *= 2) {
                                 Parameters.setTournamentSize(n);
-    
-                                for (double o =0.5; o <=1; o++) {
                                 
+                                //scaled by population size?? it looks like it's redundant but it isn't!! i think? we'll see
+                                for (double o = 0.001 * Parameters.getPopSize(); o <= 1 * Parameters.getPopSize(); o *= 2)
+                                {
+                                    var mutationToPopulationRatio = o / Parameters.getPopSize();
+                                    
+                                    Parameters.setMutateRate(mutationToPopulationRatio);
+                                    
+                                    for (double p = 0.01; p < 1; o *= 2) {
+                                        Parameters.setMutateChange(p);
+                                        
+                                        for (int q = 0; q < numberOfRunsPerParameterConfiguration; q++) {
+                                            //Create a new Neural Network Trainer Using the above parameters
+                                            NeuralNetwork nn = new ExampleEvolutionaryAlgorithm();
+                                            
+                                            //train the neural net (Go and have a coffee)
+                                            nn.run();
+                                            
+                                            /* Print out the best weights found
+                                             * (these will have been saved to disk in the project default directory using
+                                             * the saveWeights method in EvolutionaryTrainer)
+                                             */
+                                            System.out.println(nn.best);
+                                        }
+                                        
+                                    }
                                 }
                             }
                         }
@@ -59,22 +85,7 @@ public class StartNoGui
                 }
             }
         }
-    
-    
-        for (int i = 0; i < numberOfRunsPerParameterConfiguration; i++) {
-    
-            //Create a new Neural Network Trainer Using the above parameters
-            NeuralNetwork nn = new ExampleEvolutionaryAlgorithm();
-    
-            //train the neural net (Go and have a coffee)
-            nn.run();
-    
-            /* Print out the best weights found
-             * (these will have been saved to disk in the project default directory using
-             * the saveWeights method in EvolutionaryTrainer)
-             */
-            System.out.println(nn.best);
-        }
+        
         /**
          * The last File Saved to the Output Directory will contain the best weights /
          * Parameters and Fitness on the Training Set
@@ -94,7 +105,7 @@ public class StartNoGui
          * Files are saved automatically at the end of training
          *
          */
-        
+
 //        ExampleEvolutionaryAlgorithm nn2 = ExampleEvolutionaryAlgorithm.loadNeuralNetwork("1518446327913-5.txt");
 //        Parameters.setDataSet(DataSet.Random);
 //        double fitness2 = Fitness.evaluate(nn2);
@@ -102,11 +113,11 @@ public class StartNoGui
         
     }
     
-   static void createResultsFileIfNotExtant(String filename) {
+    static void createResultsFileIfNotExtant(String filename) {
         if (filename == null || !(new File(filename)).exists()) {
             
-            var parameterFields ="Run ID,"+ Parameters.printParamFieldsToCsv()+ "Training Set,Fitness"+"\r\n";
-        
+            var parameterFields = "Run ID," + Parameters.printParamFieldsToCsv() + "Training Set,Fitness" + "\r\n";
+            
             StringIO.writeStringToFile(filename, parameterFields, false);
         }
     }
