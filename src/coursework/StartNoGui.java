@@ -60,14 +60,14 @@ public class StartNoGui
                             for (int n = 2; n <= 100; n *= 2) {
                                 Parameters.setTournamentSize(n);
                                 
-                                //scaled by population size?? it looks like it's redundant but it isn't!! i think? we'll see
-                                for (double o = 0.001; o <= 1 * Parameters.getPopSize(); o += 0.001 * Parameters.getPopSize())
+                                //centred around the approx. ideal mutation rate of 1/population size
+                                for (double o = 0.25; o <= 2 ; o *=2 * Parameters.getPopSize())
                                 {
-                                    var mutationToPopulationRatio = o / Parameters.getPopSize();
+                                    var mutationToPopulationRatio = o*(1 / Parameters.getPopSize());
                                     
                                     Parameters.setMutateRate(mutationToPopulationRatio);
                                     
-                                    for (double p = 0.01; p < .1; p += 0.01) {
+                                    for (double p = 0.01; p < .1; p += 0.02) {
                                         Parameters.setMutateChange(p);
                                         
                                         for (int q = 0; q < numberOfRunsPerParameterConfiguration; q++) {
