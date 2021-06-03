@@ -12,8 +12,8 @@ public class Parameters
     
     private static int numHiddenNodes;
     private static int numGenes = calculateNumGenes();
-    private static double minGene; // specifies minimum and maximum weight values
-    private static double maxGene;
+    public static double minGene; // specifies minimum and maximum weight values
+    public static double maxGene;
     
     private static int popSize;
     private static int maxEvaluations;

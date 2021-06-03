@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
+import static java.lang.Double.valueOf;
+
 /**
  * Example of how to to run the {@link ExampleEvolutionaryAlgorithm} without the need for the GUI
  * This allows you to conduct multiple runs programmatically
@@ -29,9 +31,13 @@ public class StartNoGui
         //Set the data set for training
         Parameters.setDataSet(DataSet.Training);
         
-        Parameters.setMaxEvaluations(20000);
-        
-        var numberOfRunsPerParameterConfiguration = 10;
+        //loop testing config
+        Parameters.setMaxEvaluations(20);
+        var numberOfRunsPerParameterConfiguration = 1;
+    
+        //actual run config
+//        Parameters.setMaxEvaluations(20000);
+//        var numberOfRunsPerParameterConfiguration = 10;
         
         //yes this is nested bad complexity hell and if i were being graded on it i'd do it better but i am not (:
         for (int i = 1; i <= 4; i++) {
@@ -49,18 +55,19 @@ public class StartNoGui
                         
                         for (int m = 100; m <= 1000; m += 100) {
                             Parameters.setPopSize(m);
+                            double idealMutateRate = 1 / valueOf(m);
                             
-                            for (int n = 1; n <= 100; n *= 2) {
+                            for (int n = 2; n <= 100; n *= 2) {
                                 Parameters.setTournamentSize(n);
                                 
                                 //scaled by population size?? it looks like it's redundant but it isn't!! i think? we'll see
-                                for (double o = 0.001 * Parameters.getPopSize(); o <= 1 * Parameters.getPopSize(); o *= 2)
+                                for (double o = 0.001; o <= 1 * Parameters.getPopSize(); o += 0.001 * Parameters.getPopSize())
                                 {
                                     var mutationToPopulationRatio = o / Parameters.getPopSize();
                                     
                                     Parameters.setMutateRate(mutationToPopulationRatio);
                                     
-                                    for (double p = 0.01; p < 1; o *= 2) {
+                                    for (double p = 0.01; p < .1; p += 0.01) {
                                         Parameters.setMutateChange(p);
                                         
                                         for (int q = 0; q < numberOfRunsPerParameterConfiguration; q++) {
