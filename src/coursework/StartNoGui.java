@@ -67,7 +67,7 @@ public class StartNoGui
                                 //centred around the approx. ideal mutation rate of 1/population size
                                 for (double o = 0.25; o <= 2 ; o *=2 * Parameters.getPopSize())
                                 {
-                                    var mutationToPopulationRatio = o*(1 / Parameters.getPopSize());
+                                    var mutationToPopulationRatio = o*(1 / (double)Parameters.getPopSize());
                                     
                                     Parameters.setMutateRate(mutationToPopulationRatio);
                                     
