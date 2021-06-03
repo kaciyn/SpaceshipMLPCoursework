@@ -32,11 +32,15 @@ public class StartNoGui
         Parameters.setDataSet(DataSet.Training);
         
         //loop testing config
-        Parameters.setMaxEvaluations(20);
-        var numberOfRunsPerParameterConfiguration = 1;
+//        Parameters.setMaxEvaluations(20);
+//        var numberOfRunsPerParameterConfiguration = 1;
     
+        //vibe check  config
+        Parameters.setMaxEvaluations(10000);
+        var numberOfRunsPerParameterConfiguration = 1;
+        
         //actual run config
-//        Parameters.setMaxEvaluations(20000);
+//        Parameters.setMaxEvaluations(20000);4
 //        var numberOfRunsPerParameterConfiguration = 10;
         
         //yes this is nested bad complexity hell and if i were being graded on it i'd do it better but i am not (:
