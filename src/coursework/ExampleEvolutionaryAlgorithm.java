@@ -109,10 +109,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
     }
     
     /**
-     * Selection --
-     * <p>
-     * NEEDS REPLACED with proper selection this just returns a copy of a random
-     * member of the population
+     * Selection
      */
     private Individual select() {
         

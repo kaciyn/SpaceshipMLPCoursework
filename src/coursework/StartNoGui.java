@@ -31,99 +31,148 @@ public class StartNoGui
         //Set the data set for training
         Parameters.setDataSet(DataSet.Training);
         
+        String resultsSuffix;
+        int numberOfRunsPerParameterConfiguration = 1;
+        
         //loop testing config
-        Parameters.setMaxEvaluations(20);
-        var numberOfRunsPerParameterConfiguration = 1;
-    
+//        Parameters.setMaxEvaluations(20);
+//         numberOfRunsPerParameterConfiguration = 1;
+        
         //actual run config
 //        Parameters.setMaxEvaluations(20000);
 //        var numberOfRunsPerParameterConfiguration = 10;
         
-        //yes this is nested bad complexity hell and if i were being graded on it i'd do it better but i am not (:
+        //initial exploration config
+        Parameters.setMaxEvaluations(10000);
+        resultsSuffix = "_Exploration-1.csv";
+        
+        //Sets parameters to default configuration
+        defaultParameters();
+        
         for (int i = 1; i <= 4; i++) {
+            Parameters.setResultsFileName("Crossover" + resultsSuffix);
             Parameters.setCrossoverType(i);
-            
-            for (int j = 1; j <= 4; j++) {
-                Parameters.setChildrenPerReproduction(j);
-                
-                for (int k = 1; k <= 5; k++) {
-                    Parameters.setMaxGene(k);
-                    Parameters.setMinGene(-k);
-                    
-                    for (int l = 3; l <= 7; l++) {
-                        Parameters.setHidden(l);
-                        
-                        for (int m = 100; m <= 1000; m += 100) {
-                            Parameters.setPopSize(m);
-                            double idealMutateRate = 1 / (double) m;
-                            
-                            //tournament size scaled to population since what we're varying is the selection pressure-
-                            //although that's a question, is there a point to varying both pop and tourney size since they'll work in opposite ways wrt selection pressure?
-                            //who knows! we'll see i guess
-                            for (double n = 0.05; n <= 1; n *= 2) {
-                              var tournamentSize=  (int)(Parameters.getPopSize()*n);
-                                Parameters.setTournamentSize(tournamentSize);
-                                
-                                //centred around the approx. ideal mutation rate of 1/population size
-                                for (double o = 0.25; o <= 2 ; o *=2 * Parameters.getPopSize())
-                                {
-                                    var mutationToPopulationRatio = o*(1 / (double)Parameters.getPopSize());
-                                    
-                                    Parameters.setMutateRate(mutationToPopulationRatio);
-                                    
-                                    for (double p = 0.01; p <= .1; p += 0.015) {
-                                        Parameters.setMutateChange(p);
-                                        
-                                        for (int q = 0; q < numberOfRunsPerParameterConfiguration; q++) {
-                                            //Create a new Neural Network Trainer Using the above parameters
-                                            NeuralNetwork nn = new ExampleEvolutionaryAlgorithm();
-                                            
-                                            //train the neural net (Go and have a coffee)
-                                            nn.run();
-                                            
-                                            /* Print out the best weights found
-                                             * (these will have been saved to disk in the project default directory using
-                                             * the saveWeights method in EvolutionaryTrainer)
-                                             */
-                                            System.out.println(nn.best);
-                                        }
-                                        
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            defaultParameters();
         }
         
-        /**
-         * The last File Saved to the Output Directory will contain the best weights /
-         * Parameters and Fitness on the Training Set
-         *
-         * We can used the trained NN to Test on the test Set
-         */
+        for (int j = 1; j <= 4; j++) {
+            Parameters.setResultsFileName("ChildrenPerReproduction" + resultsSuffix);
+            Parameters.setChildrenPerReproduction(j);
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            defaultParameters();
+        }
+        
+        for (int k = 1; k <= 5; k++) {
+            Parameters.setResultsFileName("GeneRange" + resultsSuffix);
+            Parameters.setMaxGene(k);
+            Parameters.setMinGene(-k);
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            defaultParameters();
+        }
+        
+        for (int l = 3; l <= 7; l++) {
+            Parameters.setResultsFileName("HiddenLayers" + resultsSuffix);
+            Parameters.setHidden(l);
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            defaultParameters();
+        }
+        for (int m = 100; m <= 1000; m += 100) {
+            Parameters.setResultsFileName("PopulationSize" + resultsSuffix);
+            Parameters.setPopSize(m);
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            defaultParameters();
+        }
+        //tournament size scaled to population since what we're varying is the selection pressure-
+        //although that's a question, is there a point to varying both pop and tourney size since they'll work in opposite ways wrt selection pressure?
+        //who knows! we'll see i guess
+        for (double n = 0.05; n <= 1; n *= 2) {
+            Parameters.setResultsFileName("TournamentSize" + resultsSuffix);
+            var tournamentSize = (int) (Parameters.getPopSize() * n);
+            Parameters.setTournamentSize(tournamentSize);
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            defaultParameters();
+        }
+        
+        //centred around the approx. ideal mutation rate of 1/population size
+        for (double o = 0.25; o <= 2; o *= 2 * Parameters.getPopSize()) {
+            Parameters.setResultsFileName("MutationRate" + resultsSuffix);
+            var mutationToPopulationRatio = o * (1 / (double) Parameters.getPopSize());
+            
+            Parameters.setMutateRate(mutationToPopulationRatio);
+            
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            defaultParameters();
+        }
+        
+        for (double p = 0.01; p <= .1; p += 0.015) {
+            Parameters.setResultsFileName("MutationChange" + resultsSuffix);
+            Parameters.setMutateChange(p);
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            defaultParameters();
+        }
+    }
+    
+    static void runNeuralNet(int numberOfRunsPerParameterConfiguration) {
+        for (int q = 0; q < numberOfRunsPerParameterConfiguration; q++) {
+            //Create a new Neural Network Trainer Using the above parameters
+            NeuralNetwork nn = new ExampleEvolutionaryAlgorithm();
+            
+            //train the neural net (Go and have a coffee)
+            nn.run();
+            
+            /* Print out the best weights found
+             * (these will have been saved to disk in the project default directory using
+             * the saveWeights method in EvolutionaryTrainer)
+             */
+            System.out.println(nn.best);
+        }
+    }
+    
+    static void defaultParameters() {
+        Parameters.setHidden(5);
+        Parameters.setMinGene(-3);
+        Parameters.setMaxGene(3);
+        
+        Parameters.setPopSize(100);
+        Parameters.setMaxEvaluations(20000);
+        
+        Parameters.setTournamentSize(2);
+        
+        //1=1 point
+        //2=2 point
+        //3=uniform
+        //4=arithmetic
+        Parameters.setCrossoverType(3);
+        
+        Parameters.setChildrenPerReproduction(1);
+        
+        Parameters.setMutateRate(1 / Parameters.getPopSize()); // mutation rate for mutation operator
+        Parameters.setMutateChange(Parameters.getMaxGene() - Parameters.getMinGene() / 150); // delta change for mutation operator, proportional
+    }
+    /**
+     * The last File Saved to the Output Directory will contain the best weights /
+     * Parameters and Fitness on the Training Set
+     *
+     * We can used the trained NN to Test on the test Set
+     */
 //        Parameters.setDataSet(DataSet.Test);
 //        double fitness = Fitness.evaluate(nn);
 //        System.out.println("Fitness on " + Parameters.getDataSet() + " " + fitness);
-        
-        /**
-         * Or We can reload the NN from the file generated during training and test it on a data set
-         * We can supply a filename or null to open a file dialog
-         * Note that files must be in the project root and must be named *-n.txt
-         * where "n" is the number of hidden nodes
-         * ie  1518461386696-5.txt was saved at timestamp 1518461386696 and has 5 hidden nodes
-         * Files are saved automatically at the end of training
-         *
-         */
+    
+    /**
+     * Or We can reload the NN from the file generated during training and test it on a data set
+     * We can supply a filename or null to open a file dialog
+     * Note that files must be in the project root and must be named *-n.txt
+     * where "n" is the number of hidden nodes
+     * ie  1518461386696-5.txt was saved at timestamp 1518461386696 and has 5 hidden nodes
+     * Files are saved automatically at the end of training
+     */
 
 //        ExampleEvolutionaryAlgorithm nn2 = ExampleEvolutionaryAlgorithm.loadNeuralNetwork("1518446327913-5.txt");
 //        Parameters.setDataSet(DataSet.Random);
 //        double fitness2 = Fitness.evaluate(nn2);
 //        System.out.println("Fitness on " + Parameters.getDataSet() + " " + fitness2);
-        
-    }
-    
     static void createResultsFileIfNotExtant(String filename) {
         if (filename == null || !(new File(filename)).exists()) {
             

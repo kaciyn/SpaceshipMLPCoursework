@@ -9,7 +9,7 @@ import model.LunarParameters.DataSet;
 
 public class Parameters
 {
-    
+    //default Parameter values
     private static int numHiddenNodes;
     private static int numGenes = calculateNumGenes();
     public static double minGene; // specifies minimum and maximum weight values
@@ -31,17 +31,25 @@ public class Parameters
     // Parameters for mutation
     // Rate = probability of changing a gene
     // Change = the maximum +/- adjustment to the gene value
-    private static double mutateRate ; // mutation rate for mutation operator
-    private static double mutateChange ; // delta change for mutation operator
+    private static double mutateRate; // mutation rate for mutation operator
+    private static double mutateChange ; // delta change for mutation operator, proportional to gene range by a factor of 1/150, ie 0.04 for default -3 - +3 range
     
     //Random number generator used throughout the application
     public static long seed = System.currentTimeMillis();
     public static Random random = new Random(seed);
- 
+    
+    public static String getResultsFileName() {
+        return resultsFileName;
+    }
+    
+    public static void setResultsFileName(String resultsFileName) {
+        Parameters.resultsFileName = resultsFileName;
+    }
+    
     private static String resultsFileName="RunResults.csv";
     
     //set the NeuralNetwork class here to use your code from the GUI
-//    public static Class neuralNetworkClass = ExampleHillClimber.class;
+    public static Class neuralNetworkClass = ExampleEvolutionaryAlgorithm.class;
     
     /**
      * Do not change any methods that appear below here.
