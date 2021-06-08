@@ -43,8 +43,13 @@ public class StartNoGui
 //        var numberOfRunsPerParameterConfiguration = 10;
         
         //initial exploration config
-        Parameters.setMaxEvaluations(10000);
-        resultsSuffix = "_Exploration-1.csv";
+//        Parameters.setMaxEvaluations(10000);
+//        resultsSuffix = "_Exploration-1.csv";
+    
+        //exploration config 1.2
+        Parameters.setMaxEvaluations(20000);
+        numberOfRunsPerParameterConfiguration = 10;
+        resultsSuffix = "_Exploration-2.csv";
         
         //Sets parameters to default configuration
         defaultParameters();
@@ -56,16 +61,16 @@ public class StartNoGui
             runNeuralNet(numberOfRunsPerParameterConfiguration);
             defaultParameters();
         }
-
-        for (int j = 1; j <= 4; j++) {
+        
+        for (int j = 1; j <= 32; j *= 2) {
             Parameters.setResultsFileName("ChildrenPerReproduction" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
             Parameters.setChildrenPerReproduction(j);
             runNeuralNet(numberOfRunsPerParameterConfiguration);
             defaultParameters();
         }
-
-        for (int k = 1; k <= 5; k++) {
+        
+        for (int k = 2; k <= 5; k++) {
             Parameters.setResultsFileName("GeneRange" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
             Parameters.setMaxGene(k);
@@ -73,15 +78,15 @@ public class StartNoGui
             runNeuralNet(numberOfRunsPerParameterConfiguration);
             defaultParameters();
         }
-
-        for (int l = 3; l <= 7; l++) {
+        
+        for (int l = 5; l <= 10; l++) {
             Parameters.setResultsFileName("HiddenLayers" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
             Parameters.setHidden(l);
             runNeuralNet(numberOfRunsPerParameterConfiguration);
             defaultParameters();
         }
-        for (int m = 100; m <= 1000; m += 100) {
+        for (int m = 300; m <= 7000; m += 100) {
             Parameters.setResultsFileName("PopulationSize" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
             Parameters.setPopSize(m);
@@ -101,18 +106,18 @@ public class StartNoGui
         }
         
         //centred around the approx. ideal mutation rate of 1/population size
-        for (double o = 0.25; o <= 2; o *= 2 ) {
+        for (double o = .9; o <= 1.1; o +=.02 ) {
             Parameters.setResultsFileName("MutationRate" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
             var mutationToPopulationRatio = o * (1 / (double) Parameters.getPopSize());
-
+            
             Parameters.setMutateRate(mutationToPopulationRatio);
-
+            
             runNeuralNet(numberOfRunsPerParameterConfiguration);
             defaultParameters();
         }
-
-        for (double p = 0.01; p <= .1; p += 0.015) {
+        
+        for (double p = 0.01; p <= .1; p += 0.01) {
             Parameters.setResultsFileName("MutationChange" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
             Parameters.setMutateChange(p);
