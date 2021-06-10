@@ -50,53 +50,77 @@ public class StartNoGui
         Parameters.setMaxEvaluations(20000);
         numberOfRunsPerParameterConfiguration = 10;
         resultsSuffix = "_Exploration-2.csv";
+    
+        //exploration config 1.3
+        Parameters.setMaxEvaluations(20000);
+        numberOfRunsPerParameterConfiguration = 10;
+        resultsSuffix = "_Exploration-3.csv";
+    
+        //exploration config 1.4
+        Parameters.setMaxEvaluations(20000);
+        numberOfRunsPerParameterConfiguration = 10;
+        resultsSuffix = "_Exploration-4.csv";
         
         //Sets parameters to default configuration
         defaultParameters();
         
-        for (int i = 1; i <= 4; i++) {
-            Parameters.setResultsFileName("Crossover" + resultsSuffix);
+//        for (int i = 1; i <= 2; i++) {
+//            Parameters.setResultsFileName("Crossover" + resultsSuffix);
+//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+//            Parameters.setCrossoverType(i);
+//            runNeuralNet(numberOfRunsPerParameterConfiguration);
+//            defaultParameters();
+//        }
+    
+        for (int i = 1; i <= 2; i++) {
+            Parameters.setResultsFileName("Replacement" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
             Parameters.setCrossoverType(i);
             runNeuralNet(numberOfRunsPerParameterConfiguration);
             defaultParameters();
         }
+//
+//        for (int j = 1; j <= 32; j *= 2) {
+//            Parameters.setResultsFileName("ChildrenPerReproduction" + resultsSuffix);
+//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+//            Parameters.setChildrenPerReproduction(j);
+//            runNeuralNet(numberOfRunsPerParameterConfiguration);
+//            defaultParameters();
+//        }
         
-        for (int j = 1; j <= 32; j *= 2) {
-            Parameters.setResultsFileName("ChildrenPerReproduction" + resultsSuffix);
-            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-            Parameters.setChildrenPerReproduction(j);
-            runNeuralNet(numberOfRunsPerParameterConfiguration);
-            defaultParameters();
-        }
-        
-        for (int k = 2; k <= 5; k++) {
+        for (int k = 1; k <= 2; k++) {
             Parameters.setResultsFileName("GeneRange" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
+            
             Parameters.setMaxGene(k);
             Parameters.setMinGene(-k);
+            Parameters.setMutateChange((double)(Parameters.getMaxGene() - Parameters.getMinGene()) / 150);
+            
             runNeuralNet(numberOfRunsPerParameterConfiguration);
             defaultParameters();
         }
         
-        for (int l = 5; l <= 10; l++) {
+        for (int l = 5; l <= 7; l++) {
             Parameters.setResultsFileName("HiddenLayers" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
+
             Parameters.setHidden(l);
+
             runNeuralNet(numberOfRunsPerParameterConfiguration);
             defaultParameters();
         }
-        for (int m = 300; m <= 7000; m += 100) {
-            Parameters.setResultsFileName("PopulationSize" + resultsSuffix);
-            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-            Parameters.setPopSize(m);
-            runNeuralNet(numberOfRunsPerParameterConfiguration);
-            defaultParameters();
-        }
+//        for (int m = 300; m <= 700; m += 100) {
+//            Parameters.setResultsFileName("PopulationSize" + resultsSuffix);
+//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+//            Parameters.setPopSize(m);
+//            Parameters.setMutateRate(1 / (double) Parameters.getPopSize()); // mutation rate for mutation operator
+//                runNeuralNet(numberOfRunsPerParameterConfiguration);
+//            defaultParameters();
+//            }
         //tournament size scaled to population since what we're varying is the selection pressure-
         //although that's a question, is there a point to varying both pop and tourney size since they'll work in opposite ways wrt selection pressure?
         //who knows! we'll see i guess
-        for (double n = 0.05; n <= 1; n *= 2) {
+        for (double n = 0.025; n <= .8; n += .0025) {
             Parameters.setResultsFileName("TournamentSize" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
             var tournamentSize = (int) (Parameters.getPopSize() * n);
@@ -104,15 +128,15 @@ public class StartNoGui
             runNeuralNet(numberOfRunsPerParameterConfiguration);
             defaultParameters();
         }
-        
+
         //centred around the approx. ideal mutation rate of 1/population size
-        for (double o = .9; o <= 1.1; o +=.02 ) {
+        for (double o = .8; o <= 1; o +=.01 ) {
             Parameters.setResultsFileName("MutationRate" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
             var mutationToPopulationRatio = o * (1 / (double) Parameters.getPopSize());
-            
+
             Parameters.setMutateRate(mutationToPopulationRatio);
-            
+
             runNeuralNet(numberOfRunsPerParameterConfiguration);
             defaultParameters();
         }
@@ -147,7 +171,7 @@ public class StartNoGui
         Parameters.setMinGene(-3);
         Parameters.setMaxGene(3);
         
-        Parameters.setPopSize(100);
+        Parameters.setPopSize(300);
         
         Parameters.setTournamentSize(2);
         
@@ -155,12 +179,12 @@ public class StartNoGui
         //2=2 point
         //3=uniform
         //4=arithmetic
-        Parameters.setCrossoverType(3);
+        Parameters.setCrossoverType(1);
         
         Parameters.setChildrenPerReproduction(1);
         
         Parameters.setMutateRate(1 / (double) Parameters.getPopSize()); // mutation rate for mutation operator
-        Parameters.setMutateChange(Parameters.getMaxGene() - Parameters.getMinGene() / 150); // delta change for mutation operator, proportional
+        Parameters.setMutateChange((double)(Parameters.getMaxGene() - Parameters.getMinGene()) / 150); // delta change for mutation operator, proportional
     }
     /**
      * The last File Saved to the Output Directory will contain the best weights /

@@ -119,7 +119,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
         var bestFitness = pickedIndividual.fitness;
         var bestIndividual = pickedIndividual;
         
-        for (var i = 0; i < Parameters.getTournamentSize() - 1; i++) {
+        for (var i = 0; i < Parameters.getTournamentSize() ; i++) {
             pickedIndividual = population.get(random.nextInt(population.size()));
             
             if (pickedIndividual.fitness > bestFitness) {
@@ -151,7 +151,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
                 uniformCrossover(children, parent1, parent2);
             case 4:
                 arithmeticCrossover(children, parent1, parent2);
-    
+            
         }
         
         return children;
@@ -230,7 +230,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
                 child.chromosome[j] = parent2.chromosome[j];
             }
             children.add(child);
-    
+            
         }
         
         return (children);
@@ -243,9 +243,8 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
             var child = new Individual();
             child.chromosome[j] = (parent1.chromosome[j] + parent2.chromosome[j]) / 2;
             children.add(child);
-    
+            
         }
-        
         
         return (children);
     }
@@ -268,17 +267,87 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
         }
     }
     
+    //Replacement operators
+    private void replace(ArrayList<Individual> individuals) {
+        
+        switch (getCrossoverType()) {
+            case 1:
+                replaceRandom(individuals);
+                break;
+            case 2:
+                replaceWorst(individuals);
+            case 3:
+                replaceTournament(individuals);
+        }
+    }
+    
+    private void replaceRandom(ArrayList<Individual> individuals) {
+        for (Individual individual : individuals) {
+            var index = random.nextInt(population.size());
+            population.set(index, individual);
+        }
+    }
+    
     /**
      * Replaces the worst member of the population
-     * (regardless of fitness)
      */
-    //TODO this seems? implemented? like it doesn't not regard fitness
-    private void replace(ArrayList<Individual> individuals) {
+    private void replaceWorst(ArrayList<Individual> individuals) {
         for (Individual individual : individuals) {
             int index = getWorstIndex();
             population.set(index, individual);
         }
     }
+    
+    /**
+     * Selection
+     */
+    private void replaceTournament(ArrayList<Individual> individuals) {
+        for (Individual individual : individuals) {
+            
+            //tournament replacement
+            
+            var pickedIndividualIndices = new ArrayList<Integer>();
+            double worstFitness = 1;
+            int worstIndividualIndex = 0;
+            
+            for (var i = 0; i < Parameters.getReplacementTournamentSize() ; i++) {
+                var pickedIndividualIndex = random.nextInt(population.size());
+                var pickedIndividual = population.get(pickedIndividualIndex);
+                
+                if (pickedIndividual.fitness < worstFitness) {
+                    worstFitness = pickedIndividual.fitness;
+                    worstIndividualIndex = pickedIndividualIndex;
+                }
+            }
+            
+            population.set(worstIndividualIndex, individual);
+            
+        }
+    }
+
+//    /**
+//     * Returns the index of the worst member of provided group of individuals
+//     *
+//     * @return
+//     */
+//    private int getWorstIndex(ArrayList<Individual> individuals) {
+//        int index = 0;
+//
+//        var worst = individuals.get(0);
+//
+//        //why check if worst is null every time in the loop when it's only null before the loop runs
+//
+//        for (int i = 1; i < individuals.size(); i++) {
+//
+//            Individual individual = individuals.get(i);
+//
+//            if (individual.fitness < worst.fitness) {
+//                worst = individual;
+//                index = i;
+//            }
+//        }
+//        return index;
+//    }
     
     /**
      * Returns the index of the worst member of the population

@@ -20,11 +20,18 @@ public class Parameters
     
     private static int tournamentSize;
     
-    //1=1 point
-    //2=2 point
-    //3=uniform
-    //4=arithmetic
+    //1 = 1 point
+    //2 = 2 point
+    //3 = uniform
+    //4 = arithmetic
     private static int crossoverType;
+    
+    //1 = Replace worst
+    //2 = Replace random
+    //3 = Tournament replacement
+    private static int replacementType;
+    private static int replacementTournamentSize;
+    
     
     private static int childrenPerReproduction;
     
@@ -37,7 +44,7 @@ public class Parameters
     //Random number generator used throughout the application
     public static long seed = System.currentTimeMillis();
     public static Random random = new Random(seed);
-    
+//
     public static String getResultsFileName() {
         return resultsFileName;
     }
@@ -248,5 +255,21 @@ public class Parameters
     
     public static void setMaxGene(double maxGene) {
         Parameters.maxGene = maxGene;
+    }
+    
+    public static int getReplacementType() {
+        return replacementType;
+    }
+    
+    public static void setReplacementType(int replacementType) {
+        Parameters.replacementType = replacementType;
+    }
+    
+    public static int getReplacementTournamentSize() {
+        return replacementTournamentSize;
+    }
+    
+    public static void setReplacementTournamentSize(int replacementTournamentSize) {
+        Parameters.replacementTournamentSize = replacementTournamentSize;
     }
 }
