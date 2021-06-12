@@ -119,7 +119,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
         var bestFitness = pickedIndividual.fitness;
         var bestIndividual = pickedIndividual;
         
-        for (var i = 0; i < Parameters.getTournamentSize() ; i++) {
+        for (var i = 0; i < Parameters.getTournamentSize(); i++) {
             pickedIndividual = population.get(random.nextInt(population.size()));
             
             if (pickedIndividual.fitness > bestFitness) {
@@ -272,10 +272,10 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
         
         switch (getCrossoverType()) {
             case 1:
-                replaceRandom(individuals);
+                replaceWorst(individuals);
                 break;
             case 2:
-                replaceWorst(individuals);
+                replaceRandom(individuals);
             case 3:
                 replaceTournament(individuals);
         }
@@ -310,11 +310,11 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
             double worstFitness = 1;
             int worstIndividualIndex = 0;
             
-            for (var i = 0; i < Parameters.getReplacementTournamentSize() ; i++) {
+            for (var i = 0; i < Parameters.getReplacementTournamentSize(); i++) {
                 var pickedIndividualIndex = random.nextInt(population.size());
                 var pickedIndividual = population.get(pickedIndividualIndex);
                 
-                if (pickedIndividual.fitness < worstFitness) {
+                if (pickedIndividual.fitness > worstFitness) {
                     worstFitness = pickedIndividual.fitness;
                     worstIndividualIndex = pickedIndividualIndex;
                 }
