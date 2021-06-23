@@ -297,7 +297,29 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
             population.set(index, individual);
         }
     }
-    
+    /**
+     * Returns the index of the worst member of the population
+     *
+     * @return
+     */
+    private int getWorstIndex() {
+        int index = 0;
+        
+        var worst = population.get(0);
+        
+        //why check if worst is null every time in the loop when it's only null before the loop runs
+        
+        for (int i = 1; i < population.size(); i++) {
+            
+            Individual individual = population.get(i);
+            
+            if (individual.fitness > worst.fitness) {
+                worst = individual;
+                index = i;
+            }
+        }
+        return index;
+    }
     /**
      * Selection
      */
@@ -314,7 +336,8 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
                 var pickedIndividualIndex = random.nextInt(population.size());
                 var pickedIndividual = population.get(pickedIndividualIndex);
                 
-                if (pickedIndividual.fitness > worstFitness) {
+                if (pickedIndividual.fitness > worstFitness)
+                {
                     worstFitness = pickedIndividual.fitness;
                     worstIndividualIndex = pickedIndividualIndex;
                 }
@@ -324,6 +347,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
             
         }
     }
+
 
 //    /**
 //     * Returns the index of the worst member of provided group of individuals
@@ -349,29 +373,7 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
 //        return index;
 //    }
     
-    /**
-     * Returns the index of the worst member of the population
-     *
-     * @return
-     */
-    private int getWorstIndex() {
-        int index = 0;
-        
-        var worst = population.get(0);
-        
-        //why check if worst is null every time in the loop when it's only null before the loop runs
-        
-        for (int i = 1; i < population.size(); i++) {
-            
-            Individual individual = population.get(i);
-            
-            if (individual.fitness > worst.fitness) {
-                worst = individual;
-                index = i;
-            }
-        }
-        return index;
-    }
+ 
     
     @Override
     public double activationFunction(double x) {
