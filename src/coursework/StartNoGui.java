@@ -120,24 +120,26 @@ public class StartNoGui
 //            Parameters.setReplacementType(i);
 //            runNeuralNet(numberOfRunsPerParameterConfiguration);
 //customParameters();        }
-//        for (int i = 1; i <= 3; i++) {
-//            Parameters.setResultsFileName("Replacement" + resultsSuffix);
-//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-//            Parameters.setReplacementType(i);
-//            runNeuralNet(numberOfRunsPerParameterConfiguration);
-//            defaultParameters();
-//        }
-////
-//        for (double n = 0.05; n <= 1; n += .19) {
-//            Parameters.setResultsFileName("ReplacementTournament" + resultsSuffix);
-//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-//            Parameters.setReplacementType(3);
-//            var tournamentSize = (int) (Parameters.getPopSize() * n);
-//            Parameters.setReplacementTournamentSize(tournamentSize);
-//
-//            runNeuralNet(numberOfRunsPerParameterConfiguration);
-//            defaultParameters();
-//        }
+        
+        for (int i = 1; i <= 3; i++) {
+            Parameters.setResultsFileName("Replacement" + resultsSuffix);
+            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+            Parameters.setReplacementType(i);
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            defaultParameters();
+        }
+
+        
+        for (double n = 0.05; n <= 1; n += .05) {
+            Parameters.setResultsFileName("ReplacementTournament" + resultsSuffix);
+            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+            Parameters.setReplacementType(3);
+            var tournamentSize = (int) (Parameters.getPopSize() * n);
+            Parameters.setReplacementTournamentSize(tournamentSize);
+
+            runNeuralNet(20);
+            defaultParameters();
+        }
 
 //        for (int j = 1; j <= 300; j *= 2) {
 //            Parameters.setResultsFileName("ChildrenPerReproduction" + resultsSuffix);
@@ -147,17 +149,17 @@ public class StartNoGui
 //            defaultParameters();
 //        }
 
-//        for (int k = 2; k <= 3; k++) {
-//            Parameters.setResultsFileName("GeneRange" + resultsSuffix);
-//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-//
-//            Parameters.setMaxGene(k);
-//            Parameters.setMinGene(-k);
-//            Parameters.setMutateChange((Parameters.getMaxGene() - Parameters.getMinGene()) / 150);
-//
-//            runNeuralNet(numberOfRunsPerParameterConfiguration);
-//            defaultParameters();
-//        }
+        for (int k = 1; k <= 10; k+=2) {
+            Parameters.setResultsFileName("GeneRange" + resultsSuffix);
+            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+
+            Parameters.setMaxGene(k);
+            Parameters.setMinGene(-k);
+            Parameters.setMutateChange((Parameters.getMaxGene() - Parameters.getMinGene()) );
+
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            defaultParameters();
+        }
 
 //        for (int l = 5; l <= 7; l++) {
 //            Parameters.setResultsFileName("HiddenLayers" + resultsSuffix);
@@ -182,35 +184,51 @@ public class StartNoGui
             Parameters.setResultsFileName("PopulationSize" + resultsSuffix);
             createResultsFileIfNotExtant(Parameters.getResultsFilename());
             Parameters.setPopSize(m);
+            
             Parameters.setMutateRate(1 / (double) Parameters.getPopSize()); // mutation rate for mutation operator
+            Parameters.setReplacementTournamentSize((int) ((double)Parameters.getPopSize() * 0.3));
+            Parameters.setReplacementTournamentSize((int) ((double)Parameters.getPopSize() * 0.8));
+            Parameters.setTournamentSize((int) ((double)Parameters.getPopSize() * 0.01));
+           
             runNeuralNet(numberOfRunsPerParameterConfiguration);
             defaultParameters();
         }
-////
-//        //tournament size scaled to population since what we're varying is the selection pressure-
-//        //although that's a question, is there a point to varying both pop and tourney size since they'll work in opposite ways wrt selection pressure?
-//        //who knows! we'll see i guess
-//        for (double n = 0.01; n <= 0.05; n += .01) {
-//            Parameters.setResultsFileName("TournamentSize" + resultsSuffix);
-//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-//            var tournamentSize = (int) (Parameters.getPopSize() * n);
-//            Parameters.setTournamentSize(tournamentSize);
-//            runNeuralNet(numberOfRunsPerParameterConfiguration);
-//            defaultParameters();
-//        }
-////
-////        //centred around the approx. ideal mutation rate of 1/population size
-//        for (double o = .95; o <= 1; o += .01) {
-//            Parameters.setResultsFileName("MutationRate" + resultsSuffix);
-//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-//            var mutationToPopulationRatio = o * (1 / (double) Parameters.getPopSize());
 //
-//            Parameters.setMutateRate(mutationToPopulationRatio);
-//
-//            runNeuralNet(numberOfRunsPerParameterConfiguration);
-//            defaultParameters();
-//        }
-//
+        //tournament size scaled to population since what we're varying is the selection pressure-
+        //although that's a question, is there a point to varying both pop and tourney size since they'll work in opposite ways wrt selection pressure?
+        //who knows! we'll see i guess
+        for (double n = 0.05; n <= 1; n += .05) {
+            Parameters.setResultsFileName("TournamentSize" + resultsSuffix);
+            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+            var tournamentSize = (int) (Parameters.getPopSize() * n);
+            Parameters.setTournamentSize(tournamentSize);
+            runNeuralNet(20);
+            defaultParameters();
+        }
+    
+        //tournament size scaled to population since what we're varying is the selection pressure-
+        //although that's a question, is there a point to varying both pop and tourney size since they'll work in opposite ways wrt selection pressure?
+        //who knows! we'll see i guess
+        for (double n = 0.01; n <= .05; n += .01) {
+            Parameters.setResultsFileName("TournamentSize" + resultsSuffix);
+            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+            var tournamentSize = (int) (Parameters.getPopSize() * n);
+            Parameters.setTournamentSize(tournamentSize);
+            runNeuralNet(20);
+            defaultParameters();
+        }
+        
+        for (double o = .90; o <= 1; o += .01) {
+            Parameters.setResultsFileName("MutationRate" + resultsSuffix);
+            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+            var mutationToPopulationRatio =  (o * 1) / ((double) Parameters.getPopSize());
+
+            Parameters.setMutateRate(mutationToPopulationRatio);
+
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            defaultParameters();
+        }
+
 //        for (double p = 1; p < 10; p += 10) {
 //            Parameters.setResultsFileName("MutationChange" + resultsSuffix);
 //            createResultsFileIfNotExtant(Parameters.getResultsFilename());
@@ -219,13 +237,13 @@ public class StartNoGui
 //            defaultParameters();
 //        }
 
-//        for (double p = 0.1; p < 1; p += .1) {
-//            Parameters.setResultsFileName("MutationChange" + resultsSuffix);
-//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-//            Parameters.setMutateChange((double) (Parameters.getMaxGene() - Parameters.getMinGene())*p); // delta change for mutation operator, proportional
-//            runNeuralNet(numberOfRunsPerParameterConfiguration);
-//            customParameters();
-//        }
+        for (double p = 0.1; p < 1; p += .1) {
+            Parameters.setResultsFileName("MutationChange" + resultsSuffix);
+            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+            Parameters.setMutateChange((Parameters.getMaxGene() - Parameters.getMinGene()) * p); // delta change for mutation operator, proportional
+            runNeuralNet(numberOfRunsPerParameterConfiguration);
+            customParameters();
+        }
 //
 //        for (double p = 50; p <= 500; p += 50) {
 //            Parameters.setResultsFileName("MutationChange" + resultsSuffix);
@@ -265,9 +283,9 @@ public class StartNoGui
         Parameters.setMaxGene(4);
         
         Parameters.setHidden(6);
-        Parameters.setMutateChange((double) (Parameters.getMaxGene() - Parameters.getMinGene())); // delta change for mutation operator, proportional
+        Parameters.setMutateChange((Parameters.getMaxGene() - Parameters.getMinGene())); // delta change for mutation operator, proportional
         
-        Parameters.setPopSize(100);
+        Parameters.setPopSize(300);
         
         var x=0.93 / (double) Parameters.getPopSize();
     
@@ -275,9 +293,9 @@ public class StartNoGui
         //2 = Replace random
         //3 = Tournament replacement
         Parameters.setReplacementType(3);
-        Parameters.setReplacementTournamentSize((int) (Parameters.getPopSize() * 0.3));
+        Parameters.setReplacementTournamentSize((int) ((double)Parameters.getPopSize() * 0.8));
         
-        Parameters.setTournamentSize(2);
+        Parameters.setTournamentSize((int) ((double)Parameters.getPopSize() * 0.01));
         
     }
     
