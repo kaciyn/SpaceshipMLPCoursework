@@ -114,7 +114,6 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
     private Individual select() {
         
         //tournament selection
-        
         var pickedIndividual = population.get(random.nextInt(population.size()));
         var bestFitness = pickedIndividual.fitness;
         var bestIndividual = pickedIndividual;
