@@ -8,6 +8,7 @@ import java.awt.*;
 import java.io.File;
 
 import static java.lang.Double.valueOf;
+import static java.lang.Math.max;
 
 /**
  * Example of how to to run the {@link ExampleEvolutionaryAlgorithm} without the need for the GUI
@@ -19,7 +20,7 @@ public class StartNoGui
     
     public static void main(String[] args) {
         train();
-        test();
+//        test();
     }
     
     static void train() {
@@ -34,7 +35,7 @@ public class StartNoGui
         Parameters.setDataSet(DataSet.Training);
         
         String resultsSuffix;
-        int numberOfRunsPerParameterConfiguration = 1;
+        int numberOfRunsPerParameterConfiguration = 100;
         
         //loop testing config
 //        Parameters.setMaxEvaluations(20);
@@ -95,13 +96,15 @@ public class StartNoGui
 //        Parameters.setMaxEvaluations(20000);
 //        numberOfRunsPerParameterConfiguration = 20;
 //        resultsSuffix = "_Exploration-9.csv";
-        
-        //exploration config 1.9
-        Parameters.setMaxEvaluations(20000);
-        numberOfRunsPerParameterConfiguration = 30;
-        resultsSuffix = "_Exploration-11.csv";
-        
+
+//        //exploration config 1.9
+//        Parameters.setMaxEvaluations(20000);
+//        numberOfRunsPerParameterConfiguration = 30;
+//        resultsSuffix = "_Exploration-13.csv";
+//
         //Sets parameters to default configuration
+        runNeuralNet(numberOfRunsPerParameterConfiguration);
+        
         defaultParameters();
 //        runNeuralNet(numberOfRunsPerParameterConfiguration);
 //        for (int i = 1; i <= 4; i++) {
@@ -122,13 +125,13 @@ public class StartNoGui
 //            runNeuralNet(numberOfRunsPerParameterConfiguration);
 //customParameters();        }
 //
-        for (int i = 1; i <= 3; i++) {
-            Parameters.setResultsFileName("Replacement" + resultsSuffix);
-            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-            Parameters.setReplacementType(i);
-            runNeuralNet(40);
-            defaultParameters();
-        }
+//        for (int i = 1; i <= 3; i++) {
+//            Parameters.setResultsFileName("Replacement" + resultsSuffix);
+//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+//            Parameters.setReplacementType(i);
+//            runNeuralNet(20);
+//            defaultParameters();
+//        }
 //
 //
 //        for (double n = 0.05; n <= 1; n += .05) {
@@ -150,17 +153,17 @@ public class StartNoGui
 ////            defaultParameters();
 ////        }
 //
-        for (int k = 1; k <= 10; k += 2) {
-            Parameters.setResultsFileName("GeneRange" + resultsSuffix);
-            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-            
-            Parameters.setMaxGene(k);
-            Parameters.setMinGene(-k);
-            Parameters.setMutateChange((Parameters.getMaxGene() - Parameters.getMinGene()));
-            
-            runNeuralNet(numberOfRunsPerParameterConfiguration);
-            defaultParameters();
-        }
+//        for (int k = 1; k <= 10; k += 2) {
+//            Parameters.setResultsFileName("GeneRange" + resultsSuffix);
+//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+//
+//            Parameters.setMaxGene(k);
+//            Parameters.setMinGene(-k);
+//            Parameters.setMutateChange((Parameters.getMaxGene() - Parameters.getMinGene()));
+//
+//            runNeuralNet(numberOfRunsPerParameterConfiguration);
+//            defaultParameters();
+//        }
 //
 ////        for (int l = 5; l <= 7; l++) {
 ////            Parameters.setResultsFileName("HiddenLayers" + resultsSuffix);
@@ -181,23 +184,23 @@ public class StartNoGui
 ////        runNeuralNet(numberOfRunsPerParameterConfiguration);
 ////        defaultParameters();
 ////
-        for (int m = 10; m <= 100; m += 10) {
-            Parameters.setResultsFileName("PopulationSize" + resultsSuffix);
-            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-            Parameters.setPopSize(m);
-            
-            Parameters.setMutateRate(1 / (double) Parameters.getPopSize()); // mutation rate for mutation operator
-            Parameters.setMutateRate((.93 / (double) Parameters.getPopSize())); // mutation rate for mutation operator
-            
-            var replacetourn = (int) ((double) Parameters.getPopSize() * 0.8);
-            Parameters.setReplacementTournamentSize(replacetourn > 0 ? replacetourn : 2);
-            
-            var tourn = (int) ((double) Parameters.getPopSize() * 0.01);
-            Parameters.setTournamentSize(tourn > 0 ? replacetourn : 2);
-            
-            runNeuralNet(numberOfRunsPerParameterConfiguration);
-            defaultParameters();
-        }
+//        for (int m = 10; m <= 100; m += 10) {
+//            Parameters.setResultsFileName("PopulationSize" + resultsSuffix);
+//            createResultsFileIfNotExtant(Parameters.getResultsFilename());
+//            Parameters.setPopSize(m);
+//
+//            Parameters.setMutateRate(1 / (double) Parameters.getPopSize()); // mutation rate for mutation operator
+//            Parameters.setMutateRate((.93 / (double) Parameters.getPopSize())); // mutation rate for mutation operator
+//
+//            var replacetourn = (int) ((double) Parameters.getPopSize() * 0.8);
+//            Parameters.setReplacementTournamentSize(replacetourn > 0 ? replacetourn : 2);
+//
+//            var tourn = (int) ((double) Parameters.getPopSize() * 0.01);
+//            Parameters.setTournamentSize(tourn > 0 ? replacetourn : 2);
+//
+//            runNeuralNet(numberOfRunsPerParameterConfiguration);
+//            defaultParameters();
+//        }
 //
 //        //tournament size scaled to population since what we're varying is the selection pressure-
 //        //although that's a question, is there a point to varying both pop and tourney size since they'll work in opposite ways wrt selection pressure?
@@ -241,20 +244,7 @@ public class StartNoGui
 //            runNeuralNet(numberOfRunsPerParameterConfiguration);
 //            defaultParameters();
 //        }
-        
-        //exploration config 1.9
-        Parameters.setMaxEvaluations(20000);
-        numberOfRunsPerParameterConfiguration = 30;
-        resultsSuffix = "_Exploration-10.csv";
-        
-        for (double p = 0.2; p < 1; p += .1) {
-            Parameters.setResultsFileName("MutationChange" + resultsSuffix);
-            createResultsFileIfNotExtant(Parameters.getResultsFilename());
-            Parameters.setMutateChange((Parameters.getMaxGene() - Parameters.getMinGene()) * p); // delta change for mutation operator, proportional
-            runNeuralNet(numberOfRunsPerParameterConfiguration);
-            defaultParameters10();
-        }
-//
+
 //        for (double p = 50; p <= 500; p += 50) {
 //            Parameters.setResultsFileName("MutationChange" + resultsSuffix);
 //            createResultsFileIfNotExtant(Parameters.getResultsFilename());
@@ -281,7 +271,7 @@ public class StartNoGui
     }
     
     static void defaultParameters() {
-        Parameters.setPopSize(300);
+        Parameters.setPopSize(10);
         
         Parameters.setChildrenPerReproduction(1);
         
@@ -291,50 +281,24 @@ public class StartNoGui
         //4=arithmetic
         Parameters.setCrossoverType(1);
         
-        Parameters.setMinGene(-4);
-        Parameters.setMaxGene(4);
+        Parameters.setMinGene(-0.8);
+        Parameters.setMaxGene(0.8);
         
         Parameters.setHidden(6);
         Parameters.setMutateChange((Parameters.getMaxGene() - Parameters.getMinGene())); // delta change for mutation operator, proportional
         
         Parameters.setMutateRate((.93 / (double) Parameters.getPopSize())); // mutation rate for mutation operator
         
-        //1 = Replace worst
-        //2 = Replace random
-        //3 = Tournament replacement
-        Parameters.setReplacementType(3);
-        Parameters.setReplacementTournamentSize((int) ((double) Parameters.getPopSize() * 0.8));
-        
-        Parameters.setTournamentSize((int) ((double) Parameters.getPopSize() * 0.01));
-        
-    }
-    
-    static void defaultParameters10() {
-        Parameters.setPopSize(300);
-        
-        Parameters.setChildrenPerReproduction(1);
-        
-        //1=1 point
-        //2=2 point
-        //3=uniform
-        //4=arithmetic
-        Parameters.setCrossoverType(1);
-        
-        Parameters.setMinGene(-4);
-        Parameters.setMaxGene(4);
-        
-        Parameters.setHidden(6);
-        Parameters.setMutateChange((Parameters.getMaxGene() - Parameters.getMinGene())); // delta change for mutation operator, proportional
-        
-        Parameters.setMutateRate((.93 / (double) Parameters.getPopSize())); // mutation rate for mutation operator
+        var tournament = (int) ((double) Parameters.getPopSize() * 0.01);
+        Parameters.setTournamentSize(max(tournament, 2));
         
         //1 = Replace worst
         //2 = Replace random
         //3 = Tournament replacement
         Parameters.setReplacementType(3);
-        Parameters.setReplacementTournamentSize((int) ((double) Parameters.getPopSize() * 0.8));
         
-        Parameters.setTournamentSize((int) ((double) Parameters.getPopSize() * 0.01));
+        var replaceTournament = (int) ((double) Parameters.getPopSize() * 0.65);
+        Parameters.setReplacementTournamentSize(max(replaceTournament, 2));
         
     }
     
@@ -372,44 +336,41 @@ public class StartNoGui
     }
     
     static void test() {
-        var weightsFolderName = "WeightsTest";
-    
-        createTestResultsFileIfNotExtant(weightsFolderName + "-Results");
+        var weightsFolderName = "WeightsTest1";
         
-        var weightsFolder = new File("/" + weightsFolderName);
+        createTestResultsFileIfNotExtant(weightsFolderName + "-Results.csv");
+        
+        var weightsFolder = new File("" + weightsFolderName);
         
         for (var weightsFile : weightsFolder.listFiles()) {
             ExampleEvolutionaryAlgorithm neuralNetwork = ExampleEvolutionaryAlgorithm.loadNeuralNetwork(String.valueOf(weightsFile));
             
             var lines = StringIO.readStringsFromFile(String.valueOf(weightsFile));
-            var data = lines[0].split(",");
             
-            var trainingFitnessLine = data[data.length];
-            var trainingFitness=trainingFitnessLine.split(" ")[1];
+            var trainingFitness = lines[19].split(" ")[1];
             
-            var dataset=DataSet.Test;
+            var dataset = DataSet.Random;
             
             Parameters.setDataSet(dataset);
             
             var testFitness = Fitness.evaluate(neuralNetwork);
             
-            System.out.println("Fitness using " + weightsFile + "on " + Parameters.getDataSet() +"\r\n"+ "Training: "+ trainingFitness+ "\r\n"+"Test: "+testFitness);
-    
-            appendTestResultsToCsv(weightsFolderName + "-Results",weightsFile.getName(),dataset,trainingFitness,testFitness);
+            System.out.println("Fitness using " + weightsFile + " on dataset: " + Parameters.getDataSet() + "\r\n" + "Training: " + trainingFitness + "\r\n" + "Test: " + testFitness);
+            
+            appendTestResultsToCsv(weightsFolderName + "-Results.csv", weightsFile.getName(), dataset, trainingFitness, testFitness);
         }
         
     }
     
-    static void appendTestResultsToCsv(String resultsFilename,String weightsFileName,LunarParameters.DataSet dataSet,String trainingFitness, double testingFitness) {
-    if (!weightsFileName.isEmpty()) {
-        var output = "";
-        output += weightsFileName + "," +dataSet;
-        output += trainingFitness + "," + testingFitness + "\r\n";
-        
-        
-        StringIO.writeStringToFile(resultsFilename, output, true);
+    static void appendTestResultsToCsv(String resultsFilename, String weightsFileName, LunarParameters.DataSet dataSet, String trainingFitness, double testingFitness) {
+        if (!weightsFileName.isEmpty()) {
+            var output = "";
+            output += weightsFileName + "," + dataSet + ",";
+            output += trainingFitness + "," + testingFitness + "\r\n";
+            
+            StringIO.writeStringToFile(resultsFilename, output, true);
+        }
     }
-}
     
     static void createTestResultsFileIfNotExtant(String filename) {
         if (filename == null || !(new File(filename)).exists()) {
