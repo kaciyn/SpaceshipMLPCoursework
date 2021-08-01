@@ -35,7 +35,7 @@ public class StartNoGui
         Parameters.setDataSet(DataSet.Training);
         
         String resultsSuffix;
-        int numberOfRunsPerParameterConfiguration = 100;
+        int numberOfRunsPerParameterConfiguration = 20;
         
         //loop testing config
 //        Parameters.setMaxEvaluations(20);
@@ -102,10 +102,17 @@ public class StartNoGui
 //        numberOfRunsPerParameterConfiguration = 30;
 //        resultsSuffix = "_Exploration-13.csv";
 //
-        //Sets parameters to default configuration
-        runNeuralNet(numberOfRunsPerParameterConfiguration);
         
-        defaultParameters();
+        //Sets parameters to default configuration
+//        defaultParameters();
+        customParameters();
+        
+        resultsSuffix = "_Funsies.csv";
+        Parameters.setResultsFileName("Results" + resultsSuffix);
+        createResultsFileIfNotExtant(Parameters.getResultsFilename());
+        
+        runNeuralNet(numberOfRunsPerParameterConfiguration);
+
 //        runNeuralNet(numberOfRunsPerParameterConfiguration);
 //        for (int i = 1; i <= 4; i++) {
 //            Parameters.setResultsFileName("Crossover" + resultsSuffix);
@@ -270,60 +277,39 @@ public class StartNoGui
         }
     }
     
-    static void defaultParameters() {
-        Parameters.setPopSize(10);
-        
+   
+    
+    static void customParameters() {
+        Parameters.setMaxEvaluations(20000);
+    
+        Parameters.setPopSize(10000);
+    
         Parameters.setChildrenPerReproduction(1);
-        
+    
         //1=1 point
         //2=2 point
         //3=uniform
         //4=arithmetic
         Parameters.setCrossoverType(1);
-        
+    
         Parameters.setMinGene(-0.8);
         Parameters.setMaxGene(0.8);
-        
+    
         Parameters.setHidden(6);
         Parameters.setMutateChange((Parameters.getMaxGene() - Parameters.getMinGene())); // delta change for mutation operator, proportional
-        
+    
         Parameters.setMutateRate((.93 / (double) Parameters.getPopSize())); // mutation rate for mutation operator
-        
+    
         var tournament = (int) ((double) Parameters.getPopSize() * 0.01);
         Parameters.setTournamentSize(max(tournament, 2));
-        
+    
         //1 = Replace worst
         //2 = Replace random
         //3 = Tournament replacement
         Parameters.setReplacementType(3);
-        
+    
         var replaceTournament = (int) ((double) Parameters.getPopSize() * 0.65);
         Parameters.setReplacementTournamentSize(max(replaceTournament, 2));
-        
-    }
-    
-    static void customParameters() {
-        Parameters.setHidden(5);
-        Parameters.setMinGene(-3);
-        Parameters.setMaxGene(3);
-        
-        Parameters.setPopSize(100);
-        
-        Parameters.setTournamentSize(2);
-        
-        //1=1 point
-        //2=2 point
-        //3=uniform
-        //4=arithmetic
-        Parameters.setCrossoverType(1);
-        
-        Parameters.setChildrenPerReproduction(1);
-        
-        Parameters.setReplacementType(1);
-        Parameters.setReplacementTournamentSize(2);
-        
-        Parameters.setMutateRate((1 / (double) Parameters.getPopSize())); // mutation rate for mutation operator
-        Parameters.setMutateChange(3.02); // delta change for mutation operator, proportional
     }
     
     static void createResultsFileIfNotExtant(String filename) {
@@ -336,7 +322,7 @@ public class StartNoGui
     }
     
     static void test() {
-        var weightsFolderName = "WeightsTest1";
+        var weightsFolderName = "FinalWeightsTest";
         
         createTestResultsFileIfNotExtant(weightsFolderName + "-Results.csv");
         
@@ -349,7 +335,7 @@ public class StartNoGui
             
             var trainingFitness = lines[19].split(" ")[1];
             
-            var dataset = DataSet.Random;
+            var dataset = DataSet.Test;
             
             Parameters.setDataSet(dataset);
             

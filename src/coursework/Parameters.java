@@ -7,6 +7,8 @@ import model.LunarParameters;
 import model.NeuralNetwork;
 import model.LunarParameters.DataSet;
 
+import static java.lang.Math.max;
+
 public class Parameters
 {
     //default Parameter values
@@ -97,7 +99,6 @@ public class Parameters
                 val = field.get(null);
             }
             catch (IllegalArgumentException | IllegalAccessException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             str += val + ",";
@@ -118,7 +119,6 @@ public class Parameters
                 val = field.get(null);
             }
             catch (IllegalArgumentException | IllegalAccessException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             str += val + ",";
@@ -137,7 +137,6 @@ public class Parameters
                 val = field.get(null);
             }
             catch (IllegalArgumentException | IllegalAccessException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             str += name + " \t" + val + "\r\n";
@@ -271,5 +270,39 @@ public class Parameters
     
     public static void setReplacementTournamentSize(int replacementTournamentSize) {
         Parameters.replacementTournamentSize = replacementTournamentSize;
+    }
+    
+   public static void defaultParameters() {
+        Parameters.setMaxEvaluations(20000);
+        
+        Parameters.setPopSize(10);
+        
+        Parameters.setChildrenPerReproduction(1);
+        
+        //1=1 point
+        //2=2 point
+        //3=uniform
+        //4=arithmetic
+        Parameters.setCrossoverType(1);
+        
+        Parameters.setMinGene(-0.8);
+        Parameters.setMaxGene(0.8);
+        
+        Parameters.setHidden(6);
+        Parameters.setMutateChange((Parameters.getMaxGene() - Parameters.getMinGene())); // delta change for mutation operator, proportional
+        
+        Parameters.setMutateRate((.93 / (double) Parameters.getPopSize())); // mutation rate for mutation operator
+        
+        var tournament = (int) ((double) Parameters.getPopSize() * 0.01);
+        Parameters.setTournamentSize(max(tournament, 2));
+        
+        //1 = Replace worst
+        //2 = Replace random
+        //3 = Tournament replacement
+        Parameters.setReplacementType(3);
+        
+        var replaceTournament = (int) ((double) Parameters.getPopSize() * 0.65);
+        Parameters.setReplacementTournamentSize(max(replaceTournament, 2));
+        
     }
 }

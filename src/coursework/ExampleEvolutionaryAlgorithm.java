@@ -190,8 +190,6 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
             
             var child = new Individual();
             
-            //TODO MAKE SURE THIS IS ACTUALLY WORKING AS EXPECTED
-            // two points
             
             // pick crosspoint1 at random, has to leave enough room for at least one gene after crosspoint 2 (otherwise it'd just be a 1 point crossover)
             var crossPoint1 = random.nextInt(getNumGenes() - 1);
@@ -218,7 +216,6 @@ public class ExampleEvolutionaryAlgorithm extends NeuralNetwork
     public ArrayList<Individual> uniformCrossover(ArrayList<Individual> children, Individual parent1, Individual parent2)
     {
         int j;
-        //TODO DOUBLE CHECK PLS
         for (j = 0; j < getNumGenes(); j++) {
             var child = new Individual();
             
